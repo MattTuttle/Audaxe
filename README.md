@@ -8,6 +8,22 @@ Audaxe is an alternative way to load/play sounds in Haxe. It currently is in an 
 * Change volume/pan for individual channels and overall sound
 * Modify playback rate of channels (simple pitch adjustment)
 
+## Using Audaxe
+
+The easiest way to install Audaxe is through haxelib.
+
+```bash
+haxelib git Audaxe https://github.com/MattTuttle/Audaxe.git
+```
+
+Then include Audaxe in your project.xml configuration within your own project.
+
+```xml
+<haxelib name="audaxe" />
+```
+
+See the [sample](sample/source/Main.hx) to see how to load sounds and play them.
+
 ## Hacking the Engine
 
 If you want to hack on Audaxe you'll first need to compile the vendor libraries for your platform of choice.
