@@ -1,5 +1,4 @@
-Audaxe - Sound engine for Haxe/OpenFL
-======================================
+# Audaxe
 
 Audaxe is an alternative way to load/play sounds in Haxe. It currently is in an alpha state but it supports a few different features on Mac/iPhone.
 
@@ -27,7 +26,7 @@ make OS=iphonesim
 
 ### Building the Engine and Sample Project
 
-To build the Audaxe engine there are makefile targets setup for each platform.
+To build the Audaxe engine there are makefile targets setup for each platform. You can also build the project directly by running `haxelib run hxcpp Build.xml` within the project folder.
 
 ```bash
 make osx
