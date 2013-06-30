@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<meta title="Audaxe" package="com.matttuttle.audaxe" version="1.0.1" company="Matt Tuttle" />
+	<app main="Main" path="export" file="Audaxe" />
+
+	<window fps="60" resizable="true" background="0x333333" />
+	<window width="320" height="180" unless="mobile" />
+	<window fullscreen="true" if="mobile" />
+
+	<source path="source" />
+	<source path="../" />
+
+	<haxelib name="openfl" />
+	<haxelib name="audaxe" />
+
+	<template path="manifest.xml" rename="AndroidManifest.xml" if="android"/>
+
+	<assets path="assets" rename="assets" exclude="nme.svg" />
+	<icon path="assets/nme.svg" />
+
+</project>

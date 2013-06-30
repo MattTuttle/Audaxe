@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+
+	<ndll name="audaxe" />
+
+	<ndll name="ogg" register="false" if="ios" />
+	<ndll name="vorbis" register="false" if="ios" />
+	<ndll name="dumb" register="false" if="ios" />
+
+</extension>

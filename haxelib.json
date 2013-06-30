@@ -1,0 +1,10 @@
+{
+	"name": "audaxe",
+	"url" : "http://matttuttle.com/audaxe",
+	"license": "MIT",
+	"tags": ["audio", "cross"],
+	"description": "An audio engine for games.",
+	"version": "1.0.0",
+	"releasenote": "First version",
+	"contributors": ["heardtheword"]
+}
