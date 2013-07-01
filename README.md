@@ -35,6 +35,7 @@ Use the following commands to compile the vendor libraries for development build
 ```bash
 cd project/vendor/src
 make OS=darwin # osx
+make OS=darwin SS_64=true
 make OS=iphoneos
 make OS=iphoneos ARM=v7
 make OS=iphonesim
@@ -42,7 +43,13 @@ make OS=iphonesim
 
 ### Building the Engine and Sample Project
 
-To build the Audaxe engine there are makefile targets setup for each platform. You can also build the project directly by running `haxelib run hxcpp Build.xml` within the project folder.
+First make sure that Audaxe is setup for development in haxelib. You can do that with the following command.
+
+```bash
+haxelib dev audaxe path/to/audaxe
+```
+
+To build the Audaxe engine there are makefile targets setup for each platform. You can also build the project directly by running `haxelib run hxcpp Build.xml` within the project folder. Mac has an issue where the Linux ndll folder is required before building...
 
 ```bash
 make osx

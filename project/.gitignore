@@ -1,2 +1,6 @@
 obj
 all_objs
+
+vendor/src
+vendor/lib
+vendor/include

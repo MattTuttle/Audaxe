@@ -1,5 +1,11 @@
 .PHONY: clean ogg vorbis rtaudio dumb
 
+# Version of each library
+OGG := libogg-1.3.1
+VORBIS := libvorbis-1.3.3
+RTAUDIO := rtaudio-4.0.12
+DUMB := dumb-0.9.3
+
 default: all
 
 ifeq ("$(OS)","")
@@ -270,6 +276,7 @@ export SS_CREATEDLL
 # --- ALL ------------------------
 
 all: clean
+all: setup
 
 all: dumb
 
@@ -286,9 +293,12 @@ all: rtaudio
 endif
 endif
 
-# --- OGG ------------------------
+# --- SETUP ------------------------
 
-OGG := libogg-1.3.1
+setup:
+	mkdir -p $(LIB_DIR)
+
+# --- OGG ------------------------
 
 ogg: $(OGG)
 
@@ -309,8 +319,6 @@ clean::
 
 # --- VORBIS ------------------------
 
-VORBIS := libvorbis-1.3.3
-
 vorbis: $(VORBIS)
 
 $(VORBIS):
@@ -330,8 +338,6 @@ clean::
 
 # --- RTAUDIO ------------------------
 
-RTAUDIO := rtaudio-4.0.12
-
 rtaudio: $(RTAUDIO)
 
 $(RTAUDIO):
@@ -349,8 +355,6 @@ clean::
 
 # --- DUMB ------------------------
 
-DUMB := dumb-0.9.3
-
 dumb: $(DUMB)
 
 $(DUMB):
@@ -363,4 +367,3 @@ $(DUMB):
 
 clean::
 	rm -rf $(DUMB)
-
