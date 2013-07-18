@@ -28,13 +28,13 @@ class Engine
 	private static var handle(get, never):Dynamic;
 	private static inline function get_handle():Dynamic
 	{
-		if (_handle == null)
+		if (__handle == null)
 		{
-			_handle = audaxe_engine_init();
+			__handle = audaxe_engine_init();
 		}
-		return _handle;
+		return __handle;
 	}
-	private static var _handle:Dynamic;
+	private static var __handle:Dynamic;
 
 	private static var audaxe_engine_init = Lib.load("audaxe", "audaxe_engine_init", 0);
 	private static var audaxe_engine_volume = Lib.load("audaxe", "audaxe_engine_volume", 1);

@@ -11,7 +11,7 @@ class Channel
 
 	public function new(handle:Dynamic)
 	{
-		this.handle = handle;
+		__handle = handle;
 		this.volume = 1;
 		this.pan = 0;
 		this.rate = 1;
@@ -22,7 +22,7 @@ class Channel
 	{
 		if (value != sound)
 		{
-			audaxe_channel_set_sound(handle, value.handle);
+			audaxe_channel_set_sound(__handle, value.handle);
 			sound = value;
 		}
 		return value;
@@ -36,7 +36,7 @@ class Channel
 
 		if (value != pan)
 		{
-			audaxe_channel_pan(handle, value);
+			audaxe_channel_pan(__handle, value);
 			pan = value;
 		}
 		return value;
@@ -49,7 +49,7 @@ class Channel
 
 		if (value != volume)
 		{
-			audaxe_channel_volume(handle, value);
+			audaxe_channel_volume(__handle, value);
 			volume = value;
 		}
 		return value;
@@ -62,13 +62,13 @@ class Channel
 
 		if (value != rate)
 		{
-			audaxe_channel_rate(handle, value);
+			audaxe_channel_rate(__handle, value);
 			rate = value;
 		}
 		return value;
 	}
 
-	private var handle:Dynamic;
+	private var __handle:Dynamic;
 
 	private static var audaxe_channel_pan = Lib.load("audaxe", "audaxe_channel_pan", 2);
 	private static var audaxe_channel_rate = Lib.load("audaxe", "audaxe_channel_rate", 2);
