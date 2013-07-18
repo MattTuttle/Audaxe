@@ -1,4 +1,4 @@
-#ifndef IPHONE
+#ifndef STATIC_LINK
 #define IMPLEMENT_API
 #endif
 
@@ -8,7 +8,6 @@
 
 
 #include <hx/CFFI.h>
-#include <hxcpp.h>
 
 #include "AudioEngine.h"
 #include "ModSound.h"
@@ -16,9 +15,9 @@
 #include "FlacSound.h"
 using namespace Audaxe;
 
-DEFINE_KIND(k_Sound);
-DEFINE_KIND(k_Engine);
-DEFINE_KIND(k_Channel);
+DEFINE_KIND(k_sound);
+DEFINE_KIND(k_engine);
+DEFINE_KIND(k_channel);
 
 enum SoundOperation {
     kSoundOperationPlay = 0,
@@ -31,27 +30,42 @@ enum SoundOperation {
  * ENGINE
  */
 
+void audaxe_engine_close(value engineHandle)
+{
+    AudioEngine *engine = (AudioEngine *)val_to_kind(engineHandle, k_engine);
+    delete engine;
+    engine = 0;
+}
+
 value audaxe_engine_init()
 {
     AudioEngine *engine = new AudioEngine();
-    return alloc_abstract(k_Engine, engine);
+    value v = alloc_abstract(k_engine, engine);
+    val_gc(v, audaxe_engine_close);
+    return v;
 }
-DEFINE_PRIM (audaxe_engine_init, 0);
 
-void audaxe_engine_volume(value volume)
+value audaxe_engine_volume(value volume)
 {
-    AudioEngine::volume = val_float(volume);
+    if (val_is_float(volume))
+    {
+        AudioEngine::volume = val_float(volume);
+    }
+    return volume;
 }
-DEFINE_PRIM (audaxe_engine_volume, 1);
 
 value audaxe_engine_create_channel(value engineHandle)
 {
-    val_check_kind(engineHandle, k_Engine);
-    AudioEngine *engine = (AudioEngine *)val_data(engineHandle);
+    if (!val_is_kind(engineHandle, k_engine)) return alloc_null();
+
+    AudioEngine *engine = (AudioEngine *)val_to_kind(engineHandle, k_engine);
     AudioChannel *channel = engine->createChannel();
-    return alloc_abstract(k_Channel, channel);
+    return alloc_abstract(k_channel, channel);
 }
-DEFINE_PRIM (audaxe_engine_create_channel, 1);
+
+DEFINE_PRIM(audaxe_engine_init, 0);
+DEFINE_PRIM(audaxe_engine_volume, 1);
+DEFINE_PRIM(audaxe_engine_create_channel, 1);
 
 /**
  * SOUND
@@ -61,46 +75,51 @@ value audaxe_sound_load_tracker(value filename)
 {
 	ModSound *sound = new ModSound(val_string(filename));
 	sound->setLoopMode(true);
-    return alloc_abstract(k_Sound, sound);
+    return alloc_abstract(k_sound, sound);
 }
-DEFINE_PRIM (audaxe_sound_load_tracker, 1);
 
 value audaxe_sound_load_vorbis(value filename)
 {
     VorbisSound * sound = new VorbisSound(val_string(filename));
-    return alloc_abstract(k_Sound, sound);
+    return alloc_abstract(k_sound, sound);
 }
-DEFINE_PRIM (audaxe_sound_load_vorbis, 1);
 
 value audaxe_sound_load_flac(value filename)
 {
     FlacSound * sound = new FlacSound(val_string(filename));
-    return alloc_abstract(k_Sound, sound);
+    return alloc_abstract(k_sound, sound);
 }
-DEFINE_PRIM (audaxe_sound_load_flac, 1);
 
 void audaxe_sound_operation(value soundHandle, value operation)
 {
-    val_check_kind(soundHandle, k_Sound);
-    AudioSound *sound = (AudioSound *)val_data(soundHandle);
-    switch (val_int(operation))
+    if (val_is_kind(soundHandle, k_sound))
     {
-        case kSoundOperationPlay: sound->play(); break;
-        case kSoundOperationStop: sound->stop(); break;
-        case kSoundOperationPause: sound->pause(); break;
-        case kSoundOperationResume: sound->resume(); break;
+        AudioSound *sound = (AudioSound *)val_to_kind(soundHandle, k_sound);
+        switch (val_int(operation))
+        {
+            case kSoundOperationPlay: sound->play(); break;
+            case kSoundOperationStop: sound->stop(); break;
+            case kSoundOperationPause: sound->pause(); break;
+            case kSoundOperationResume: sound->resume(); break;
+        }
     }
 }
-DEFINE_PRIM (audaxe_sound_operation, 2);
 
-void audaxe_sound_loop_points(value handle, value start, value end)
+void audaxe_sound_loop_points(value soundHandle, value start, value end)
 {
-    val_check_kind(handle, k_Sound);
-    AudioSound *sound = (AudioSound *)val_data(handle);
-    sound->setLoopPoints(val_int(start), val_int(end), kAudioModeMilliseconds);
-    sound->setLoopMode(true);
+    if (val_is_kind(soundHandle, k_sound))
+    {
+        AudioSound *sound = (AudioSound *)val_to_kind(soundHandle, k_sound);
+        sound->setLoopPoints(val_int(start), val_int(end), kAudioModeMilliseconds);
+        sound->setLoopMode(true);
+    }
 }
-DEFINE_PRIM (audaxe_sound_loop_points, 3);
+
+DEFINE_PRIM(audaxe_sound_load_tracker, 1);
+DEFINE_PRIM(audaxe_sound_load_vorbis, 1);
+DEFINE_PRIM(audaxe_sound_load_flac, 1);
+DEFINE_PRIM(audaxe_sound_operation, 2);
+DEFINE_PRIM(audaxe_sound_loop_points, 3);
 
 /**
  * CHANNEL
@@ -108,35 +127,47 @@ DEFINE_PRIM (audaxe_sound_loop_points, 3);
 
 void audaxe_channel_set_sound(value channelHandle, value soundHandle)
 {
-    val_check_kind(channelHandle, k_Channel);
-    AudioChannel *channel = (AudioChannel *)val_data(channelHandle);
-    AudioSound *sound = (AudioSound *)val_data(soundHandle);
-    channel->setSound(sound);
+    if (val_is_kind(channelHandle, k_channel) && val_is_kind(soundHandle, k_sound))
+    {
+        AudioChannel *channel = (AudioChannel *)val_to_kind(channelHandle, k_channel);
+        AudioSound *sound = (AudioSound *)val_to_kind(soundHandle, k_sound);
+        channel->setSound(sound);
+    }
 }
-DEFINE_PRIM (audaxe_channel_set_sound, 2);
 
-void audaxe_channel_volume(value channelHandle, value volume)
+value audaxe_channel_volume(value channelHandle, value volume)
 {
-    val_check_kind(channelHandle, k_Channel);
-    AudioChannel *channel = (AudioChannel *)val_data(channelHandle);
-    channel->setVolume(val_float(volume));
+    if (val_is_kind(channelHandle, k_channel))
+    {
+        AudioChannel *channel = (AudioChannel *)val_to_kind(channelHandle, k_channel);
+        channel->setVolume(val_float(volume));
+    }
+    return volume;
 }
-DEFINE_PRIM (audaxe_channel_volume, 2);
 
-void audaxe_channel_pan(value channelHandle, value pan)
+value audaxe_channel_pan(value channelHandle, value pan)
 {
-    val_check_kind(channelHandle, k_Channel);
-    AudioChannel *channel = (AudioChannel *)val_data(channelHandle);
-    channel->setPan(val_float(pan));
+    if (val_is_kind(channelHandle, k_channel))
+    {
+        AudioChannel *channel = (AudioChannel *)val_to_kind(channelHandle, k_channel);
+        channel->setPan(val_float(pan));
+    }
+    return pan;
 }
-DEFINE_PRIM (audaxe_channel_pan, 2);
 
-void audaxe_channel_rate(value channelHandle, value rate)
+value audaxe_channel_rate(value channelHandle, value rate)
 {
-    val_check_kind(channelHandle, k_Channel);
-    AudioChannel *channel = (AudioChannel *)val_data(channelHandle);
-    channel->setRate(val_float(rate));
+    if (val_is_kind(channelHandle, k_channel))
+    {
+        AudioChannel *channel = (AudioChannel *)val_to_kind(channelHandle, k_channel);
+        channel->setRate(val_float(rate));
+    }
+    return rate;
 }
-DEFINE_PRIM (audaxe_channel_rate, 2);
+
+DEFINE_PRIM(audaxe_channel_set_sound, 2);
+DEFINE_PRIM(audaxe_channel_volume, 2);
+DEFINE_PRIM(audaxe_channel_pan, 2);
+DEFINE_PRIM(audaxe_channel_rate, 2);
 
 extern "C" int audaxe_register_prims () { return 0; }
