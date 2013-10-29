@@ -5,7 +5,7 @@ osx:
 	cd project && haxelib run hxcpp Build.xml -Dfulldebug
 	cd project && haxelib run hxcpp Build.xml -DHXCPP_M64
 	cd project && haxelib run hxcpp Build.xml -DHXCPP_M64 -Dfulldebug
-	cd sample && haxelib run openfl test project.xml cpp
+	cd sample && haxelib run openfl test project.xml neko
 
 ios:
 	cd project && haxelib run hxcpp Build.xml -Diphone -Diphoneos
