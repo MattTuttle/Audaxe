@@ -22,7 +22,7 @@ class Sound
 			var path = Assets.getPath(id);
 #if ios
 			path = File.applicationDirectory.nativePath + "/assets/" + path;
-#elseif mac
+#elseif (cpp && mac)
 			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
 #end
 			return new Sound(audaxe_sound_load_vorbis(path));
@@ -38,6 +38,8 @@ class Sound
 			var path = Assets.getPath(id);
 #if ios
 			path = File.applicationDirectory.nativePath + "/assets/" + path;
+#elseif (cpp && mac)
+			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
 #end
 			return new Sound(audaxe_sound_load_tracker(path));
 		}
