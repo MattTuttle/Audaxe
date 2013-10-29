@@ -17,17 +17,15 @@ class Sound
 
 	public static function loadOggVorbis(id:String):Sound
 	{
-		if (Assets.path.exists(id))
+		if (Assets.exists(id, SOUND) || Assets.exists(id, MUSIC))
 		{
-			var type = Assets.type.get(id);
-			if (type == SOUND || type == MUSIC)
-			{
-				var path = Assets.path.get(id);
+			var path = Assets.getPath(id);
 #if ios
-				path = File.applicationDirectory.nativePath + "/assets/" + path;
+			path = File.applicationDirectory.nativePath + "/assets/" + path;
+#elseif mac
+			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
 #end
-				return new Sound(audaxe_sound_load_vorbis(path));
-			}
+			return new Sound(audaxe_sound_load_vorbis(path));
 		}
 		trace("[com.matttuttle.Sound] There is no Sound asset with an ID of \"" + id + "\"");
 		return null;
@@ -35,9 +33,9 @@ class Sound
 
 	public static function loadTracker(id:String):Sound
 	{
-		if (Assets.path.exists(id) && Assets.type.get(id) == BINARY)
+		if (Assets.exists(id, BINARY))
 		{
-			var path = Assets.path.get(id);
+			var path = Assets.getPath(id);
 #if ios
 			path = File.applicationDirectory.nativePath + "/assets/" + path;
 #end

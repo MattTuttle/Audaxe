@@ -83,7 +83,7 @@
 	<set name="name_extra" value=".iphoneos${IOS_ARCH}" if="iphoneos"/>
 	<set name="name_extra" value="-x86" if="simulator" unless="iphonesim"/>
 
-	<target id="NDLL" output="${name_prefix}audaxe${debug_extra}${name_extra}" tool="linker" toolid="${ndll-tool}">
+	<target id="NDLL" output="${name_prefix}audaxe${debug_extra}${name_extra}" tool="${tool}" toolid="${ndll-tool}">
 		<outdir name="../ndll/${BINDIR}"/>
 		<ext value=".ndll" unless="mobile"/>
 		<ext value=".a" if="emscripten"/>

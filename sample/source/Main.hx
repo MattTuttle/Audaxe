@@ -3,6 +3,7 @@ import flash.display.Sprite;
 import flash.filesystem.File;
 import flash.events.KeyboardEvent;
 import flash.events.TouchEvent;
+import flash.events.Event;
 import flash.ui.Keyboard;
 import flash.ui.Multitouch;
 import flash.ui.MultitouchInputMode;
@@ -17,6 +18,19 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
+		if (Lib.current.stage == null)
+		{
+			Lib.current.stage.addEventListener(Event.ADDED_TO_STAGE, onStage);
+		}
+		else
+		{
+			onStage();
+		}
+	}
+
+	private function onStage(?e:Event)
+	{
 		channel = Engine.createChannel();
 		var sound = Sound.loadOggVorbis("assets/bgm.ogg");
 		// var sound = Sound.loadTracker("assets/storm.xm");

@@ -125,13 +125,14 @@ default:
 endif
 
     ANDROID_HOST := $(OSTYPE)
-    ANDROID_HOST := $(ANDROID_HOST:darwin%=darwin-x86)
+    ANDROID_HOST := $(ANDROID_HOST:darwin%=darwin-x86_64)
     ANDROID_HOST := $(ANDROID_HOST:Windows%=windows)
 
     PATH := $(ANDROID_NDK_ROOT)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/$(ANDROID_HOST)/arm-linux-androideabi/bin:$(ANDROID_NDK_ROOT)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/$(ANDROID_HOST)/libexec/gcc/arm-linux-androideabi/4.4.3:$(PATH)
 
     SS_ANDROID := 1
 	export SS_ANDROID
+	export PATH
 	SS_CONFIG := android
 	LIB_DIR := ../lib/Android
 	#JCONFIG := jconfig.mac

@@ -16,7 +16,7 @@
 
 	<template path="manifest.xml" rename="AndroidManifest.xml" if="android"/>
 
-	<assets path="assets" rename="assets" exclude="nme.svg" />
+	<assets path="assets" exclude="nme.svg" />
 	<icon path="assets/nme.svg" />
 
 </project>
