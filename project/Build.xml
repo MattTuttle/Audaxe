@@ -1,8 +1,5 @@
 <xml>
 
-	<set name="GCC_THIN_ARCHIVE" value="1" if="iphone"/>
-	<set name="debug" value="debug" if ="fulldebug" />
-
 	<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
 
 	<set name="iphonesim" value="1" if="ios" />
@@ -31,7 +28,6 @@
 	<set name="SLIBEXT" value=".lib" if="windows"/>
 	<set name="SLIBEXT" value=".a" unless="windows"/>
 	<set name="SLIBEXT" value=".so" if="webos"/>
-	<set name="SLIBEXT" value=".a" if="emscripten"/>
 
 	<files id="iphone">
 		<depend name="${HXCPP}/include/hx/Macros.h"/>
@@ -71,19 +67,19 @@
 	<set name="tool" value="exe" unless="iphone"/>
 	<set name="tool" value="static_link" if="iphone"/>
 
-	<set name="IOS_ARCH" value="-v7" if="HXCPP_ARMV7"/>
+	<set name="ARM_ARCH" value="-v7" if="HXCPP_ARMV7"/>
 
 	<set name="ndll-tool" value="dll" unless="iphone"/>
 	<set name="ndll-tool" value="static_link" if="iphone"/>
 	<set name="name_prefix" value="lib" if="iphone"/>
 
-	<set name="debug_extra" value="-debug" if="fulldebug" />
+	<set name="debug_extra" value="-debug" if="debug" />
 
 	<set name="name_extra" value=".iphonesim" if="iphonesim"/>
-	<set name="name_extra" value=".iphoneos${IOS_ARCH}" if="iphoneos"/>
+	<set name="name_extra" value=".iphoneos${ARM_ARCH}" if="iphoneos"/>
 	<set name="name_extra" value="-x86" if="simulator" unless="iphonesim"/>
 
-	<target id="NDLL" output="${name_prefix}audaxe${debug_extra}${name_extra}" tool="${tool}" toolid="${ndll-tool}">
+	<target id="NDLL" output="${name_prefix}audaxe${debug_extra}${name_extra}" tool="linker" toolid="${ndll-tool}">
 		<outdir name="../ndll/${BINDIR}"/>
 		<ext value=".ndll" unless="mobile"/>
 		<ext value=".a" if="emscripten"/>

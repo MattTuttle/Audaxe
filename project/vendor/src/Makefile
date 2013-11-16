@@ -156,7 +156,7 @@ else
     XCODE_DEVELOPER :=  /Applications/Xcode.app/Contents/Developer
 endif
 
-IPHONE_VER := 6.1
+IPHONE_VER := 7.0
 ifneq ("$(VER)","")
     IPHONE_VER := $(VER)
 endif
@@ -177,7 +177,7 @@ ifeq ("$(OS)","iphoneos")
     SS_CONFIG := iphoneos
     SS_IPHONE := 1
     LIB_DIR := ../lib/iPhone
-    SS_CC := $(XCODE_DEVELOPER)/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc  \
+    SS_CC := $(XCODE_DEVELOPER)/usr/bin/gcc  \
         -DIPHONE=1 -D__IPHONEOS__=1 -O2 \
         -arch $(IPHONE_ARCH) -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings \
         -Wreturn-type -Wunused-variable -fno-stack-protector  \
