@@ -20,9 +20,7 @@ class Sound
 		if (Assets.exists(id, SOUND) || Assets.exists(id, MUSIC))
 		{
 			var path = Assets.getPath(id);
-#if ios
-			path = File.applicationDirectory.nativePath + "/assets/" + path;
-#elseif (cpp && mac)
+#if (cpp && mac)
 			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
 #end
 			return new Sound(audaxe_sound_load_vorbis(path));
@@ -36,9 +34,7 @@ class Sound
 		if (Assets.exists(id, BINARY))
 		{
 			var path = Assets.getPath(id);
-#if ios
-			path = File.applicationDirectory.nativePath + "/assets/" + path;
-#elseif (cpp && mac)
+#if (cpp && mac)
 			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
 #end
 			return new Sound(audaxe_sound_load_tracker(path));

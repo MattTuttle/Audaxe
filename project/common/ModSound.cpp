@@ -26,10 +26,11 @@ namespace Audaxe
 	ModSound::ModSound(const char *filename) : AudioSound()
 	{
 		mPos = 0;
+		sr = 0;
 
 		FILE* file = fopen(filename, "rb");
 		if(!file) {
-			// LOG(kLogCritical, "Can not find audio file \"" << filename << "\"");
+			printf("Can not find audio file \"%s\"", filename);
 			return;
 		}
 		dumb_register_stdfiles();
@@ -92,9 +93,13 @@ namespace Audaxe
 		if(length == 0 || mStatus == 0)
 			return 0;
 
-//		short *buf = (short*)buffer;
-		long got = duh_render(sr, 16, 0, 1.0f, delta, length/4, buffer)*4;
-		mPos += got;
+		// short *buf = (short*)buffer;
+		long got = 0;
+		if (sr)
+		{
+			got = duh_render(sr, 16, 0, 1.0f, delta, length/4, buffer)*4;
+			mPos += got;
+		}
 		return (int)got;
 	}
 

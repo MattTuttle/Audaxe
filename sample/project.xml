@@ -9,7 +9,6 @@
 	<window fullscreen="true" if="mobile" />
 
 	<source path="source" />
-	<source path="../" />
 
 	<haxelib name="openfl" />
 	<haxelib name="audaxe" />

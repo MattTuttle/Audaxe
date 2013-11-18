@@ -33,6 +33,7 @@
 		<depend name="${HXCPP}/include/hx/Macros.h"/>
 		<depend name="${HXCPP}/include/hx/CFFI.h"/>
 		<compilerflag value="-Iinclude"/>
+		<compilerflag value="-stdlib=libc++" if="HXCPP_ARMV7" />
 		<file name="drivers/iOSAudioDriver.cpp"/>
 	</files>
 
@@ -55,6 +56,7 @@
 		<compilerflag value="-I${VENDOR}/include"/>
 		<compilerflag value="-mmacosx-version-min=10.7" if="macos"/>
 		<compilerflag value="-I${ANDROID_NDK}/usr/include" if="android"/>
+		<compilerflag value="-stdlib=libc++" if="HXCPP_ARMV7" />
 		<file name="common/AudioChannel.cpp"/>
 		<file name="common/AudioEngine.cpp"/>
 		<file name="common/ExternalInterface.cpp"/>

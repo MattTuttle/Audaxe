@@ -32,8 +32,8 @@ class Main extends Sprite
 	private function onStage(?e:Event)
 	{
 		channel = Engine.createChannel();
-		var sound = Sound.loadOggVorbis("assets/bgm.ogg");
-		// var sound = Sound.loadTracker("assets/storm.xm");
+		// var sound = Sound.loadOggVorbis("assets/bgm.ogg");
+		var sound = Sound.loadTracker("assets/storm.xm");
 		if (sound != null)
 		{
 			sound.setLoop();

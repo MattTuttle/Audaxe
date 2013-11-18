@@ -74,6 +74,8 @@ namespace Audaxe
 
 	void Resampler::pushInput(int size)
 	{
+		// prevent divide by zero
+		if (inBits == 0 || inChannels == 0) return;
 		inSamples = (size + inStart) / (inBits / 8) / inChannels;
 		if (outAdjusterRealRate < 0)
 		{
