@@ -1,4 +1,4 @@
-all: osx
+all: android
 
 osx:
 	cd project/vendor/src && make OS=darwin
