@@ -1,10 +1,8 @@
 <xml>
 
-	<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
+	<set name="debug" value="debug" if="fulldebug" />
 
-	<set name="iphonesim" value="1" if="ios" />
-	<set name="iphoneos" value="1" if="ios" unless="simulator" />
-	<set name="win_desktop" value="1" if="windows" unless="winrt"/>
+	<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
 
 	<set name="mobile" value="1" if="iphone"/>
 	<set name="mobile" value="1" if="android"/>
@@ -23,17 +21,14 @@
 	<set name="THIRDPARTY_LIBS" value="${VENDOR}/lib/Android/" if="android"/>
 	<set name="THIRDPARTY_LIBS" value="${VENDOR}/lib/iPhone/" if="iphone"/>
 	<set name="THIRDPARTY_LIBS" value="${VENDOR}/lib/BlackBerry/" if="blackberry"/>
-	<set name="THIRDPARTY_LIBS" value="${VENDOR}/lib/Emscripten/" if="emscripten"/>
 
 	<set name="SLIBEXT" value=".lib" if="windows"/>
 	<set name="SLIBEXT" value=".a" unless="windows"/>
-	<set name="SLIBEXT" value=".so" if="webos"/>
 
 	<files id="iphone">
 		<depend name="${HXCPP}/include/hx/Macros.h"/>
 		<depend name="${HXCPP}/include/hx/CFFI.h"/>
 		<compilerflag value="-Iinclude"/>
-		<compilerflag value="-stdlib=libc++" if="HXCPP_ARMV7" />
 		<file name="drivers/iOSAudioDriver.cpp"/>
 	</files>
 
@@ -56,7 +51,6 @@
 		<compilerflag value="-I${VENDOR}/include"/>
 		<compilerflag value="-mmacosx-version-min=10.7" if="macos"/>
 		<compilerflag value="-I${ANDROID_NDK}/usr/include" if="android"/>
-		<compilerflag value="-stdlib=libc++" if="HXCPP_ARMV7" />
 		<file name="common/AudioChannel.cpp"/>
 		<file name="common/AudioEngine.cpp"/>
 		<file name="common/ExternalInterface.cpp"/>
@@ -66,36 +60,26 @@
 		<file name="common/Resampler.cpp"/>
 	</files>
 
-	<set name="tool" value="exe" unless="iphone"/>
-	<set name="tool" value="static_link" if="iphone"/>
+	<set name="IOS_ARCH" value="-v7" if="HXCPP_ARMV7"/>
 
-	<set name="ARM_ARCH" value="-v7" if="HXCPP_ARMV7"/>
+	<set name="DEBUG_EXTRA" value="-debug" if="fulldebug" />
 
-	<set name="ndll-tool" value="dll" unless="iphone"/>
-	<set name="ndll-tool" value="static_link" if="iphone"/>
-	<set name="name_prefix" value="lib" if="iphone"/>
+	<!-- <set name="OUT_DIR" value="../${NDLLDIR}" /> -->
+	<set name="OUT_DIR" value="../ndll" />
 
-	<set name="debug_extra" value="-debug" if="debug" />
-
-	<set name="name_extra" value=".iphonesim" if="iphonesim"/>
-	<set name="name_extra" value=".iphoneos${ARM_ARCH}" if="iphoneos"/>
-	<set name="name_extra" value="-x86" if="simulator" unless="iphonesim"/>
-
-	<target id="NDLL" output="${name_prefix}audaxe${debug_extra}${name_extra}" tool="linker" toolid="${ndll-tool}">
-		<outdir name="../ndll/${BINDIR}"/>
+	<target id="NDLL" output="${LIBPREFIX}audaxe${MSVC_LIB_VERSION}${DEBUG_EXTRA}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">
+		<outdir name="${OUT_DIR}/${BINDIR}"/>
 		<ext value=".ndll" unless="mobile"/>
-		<ext value=".a" if="emscripten"/>
-		<ext value=".ndll" if="gph"/>
 
 		<files id="iphone" if="iphone"/>
 		<files id="opensl" if="android"/>
 		<files id="rtaudio" unless="mobile"/>
 		<files id="common"/>
 
-		<lib name="${THIRDPARTY_LIBS}librtaudio${name_extra}${SLIBEXT}" unless="mobile"/>
-		<lib name="${THIRDPARTY_LIBS}libdumb${name_extra}${SLIBEXT}" unless="iphone"/>
-		<lib name="${THIRDPARTY_LIBS}libvorbis${name_extra}${SLIBEXT}" unless="iphone"/>
-		<lib name="${THIRDPARTY_LIBS}libogg${name_extra}${SLIBEXT}" unless="iphone"/>
+		<lib name="${THIRDPARTY_LIBS}librtaudio${LIBEXTRA}${SLIBEXT}" unless="mobile"/>
+		<lib name="${THIRDPARTY_LIBS}libdumb${LIBEXTRA}${SLIBEXT}" unless="iphone"/>
+		<lib name="${THIRDPARTY_LIBS}libvorbis${LIBEXTRA}${SLIBEXT}" unless="iphone"/>
+		<lib name="${THIRDPARTY_LIBS}libogg${LIBEXTRA}${SLIBEXT}" unless="iphone"/>
 
 		<lib name="-L${ANDROID_NDK}/usr/lib" if="android"/>
 		<lib name="-lOpenSLES" if="android"/>
