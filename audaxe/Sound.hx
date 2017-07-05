@@ -5,8 +5,7 @@ import neko.Lib;
 #elseif cpp
 import cpp.Lib;
 #end
-import openfl.Assets;
-import flash.filesystem.File;
+import sys.FileSystem;
 
 class Sound
 {
@@ -15,31 +14,23 @@ class Sound
 		this.handle = handle;
 	}
 
-	public static function loadOggVorbis(id:String):Sound
+	public static function loadOggVorbis(path:String):Sound
 	{
-		if (Assets.exists(id, SOUND) || Assets.exists(id, MUSIC))
+		if (FileSystem.exists(path))
 		{
-			var path = Assets.getPath(id);
-#if (cpp && mac)
-			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
-#end
 			return new Sound(audaxe_sound_load_vorbis(path));
 		}
-		trace("[com.matttuttle.Sound] There is no Sound asset with an ID of \"" + id + "\"");
+		trace("[audaxe.Sound] There is no Sound asset at \"" + path + "\"");
 		return null;
 	}
 
-	public static function loadTracker(id:String):Sound
+	public static function loadTracker(path:String):Sound
 	{
-		if (Assets.exists(id, BINARY))
+		if (FileSystem.exists(path))
 		{
-			var path = Assets.getPath(id);
-#if (cpp && mac)
-			path = File.applicationDirectory.nativePath + "/Contents/Resources/" + path;
-#end
 			return new Sound(audaxe_sound_load_tracker(path));
 		}
-		trace("[com.matttuttle.Sound] There is no Sound asset with an ID of \"" + id + "\"");
+		trace("[audaxe.Sound] There is no Sound asset at \"" + path + "\"");
 		return null;
 	}
 
@@ -67,7 +58,6 @@ class Sound
 	{
 		audaxe_sound_operation(handle, soundOperationResume);
 	}
-
 
 	public var handle:Dynamic;
 
